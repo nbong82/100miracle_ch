@@ -807,6 +807,406 @@ const courseData = {
       ]
     },
     {
+      day: 21,
+      title: "你喜欢什么颜色的衣服？ (어떤 색깔 옷 좋아해?)",
+      youtubeTime: "00:00",
+      seconds: 0,
+      dialogues: [
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "你喜欢什么颜色的衣服？",
+          pinyin: "Nǐ xǐhuan shénme yánsè de yīfu?",
+          kr: "너는 어떤 색깔의 옷을 좋아하니?",
+          note: "颜色(yánsè): 색깔 / 衣服(yīfu): 옷"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "我喜欢黑色的和白色的。",
+          pinyin: "Wǒ xǐhuan hēisè de hé báisè de.",
+          kr: "나는 검은색이랑 흰색을 좋아해.",
+          note: "黑色(hēisè): 검은색 / 白色(báisè): 흰색"
+        },
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "这件红色的怎么样？",
+          pinyin: "Zhè jiàn hóngsè de zěnmeyàng?",
+          kr: "이 빨간색 옷은 어때?",
+          note: "件(jiàn): 옷을 세는 양사 / 红色(hóngsè): 빨간색"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "很漂亮，也很适合你。",
+          pinyin: "Hěn piàoliang, yě hěn shìhé nǐ.",
+          kr: "아주 예쁘다, 너한테도 잘 어울려.",
+          note: "漂亮(piàoliang): 예쁘다 / 适合(shìhé): 어울리다"
+        }
+      ]
+    },
+    {
+      day: 22,
+      title: "你有时间吗？ (시간 좀 있어?)",
+      youtubeTime: "06:15",
+      seconds: 375,
+      dialogues: [
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "你现在有时间吗？",
+          pinyin: "Nǐ xiànzài yǒu shíjiān ma?",
+          kr: "너 지금 시간 좀 있어?",
+          note: "时间(shíjiān): 시간"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "有一点儿，有什么事吗？",
+          pinyin: "Yǒu yìdiǎnr, yǒu shénme shì ma?",
+          kr: "조금 있는데, 무슨 일 있어?",
+          note: "有一点儿: 조금 있다 / 事(shì): 일, 용건"
+        },
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "我想请你喝咖啡。",
+          pinyin: "Wǒ xiǎng qǐng nǐ hē kāfēi.",
+          kr: "너한테 커피 한잔 사주고 싶어서.",
+          note: "请(qǐng): 대접하다, 사다"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "太好了，我们走吧。",
+          pinyin: "Tài hǎo le, wǒmen zǒu ba.",
+          kr: "너무 좋다, 우리 가자.",
+          note: "走(zǒu): 가다, 걷다"
+        }
+      ]
+    },
+    {
+      day: 23,
+      title: "你住在哪里？ (어디에 살아?)",
+      youtubeTime: "12:30",
+      seconds: 750,
+      dialogues: [
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "你住在哪里？",
+          pinyin: "Nǐ zhù zài nǎlǐ?",
+          kr: "너 어디에 살아?",
+          note: "住(zhù): 살다, 거주하다 / 哪里(nǎlǐ): 어디"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "我住在学校附近。",
+          pinyin: "Wǒ zhù zài xuéxiào fùjìn.",
+          kr: "나 학교 근처에 살아.",
+          note: "学校(xuéxiào): 학교 / 附近(fùjìn): 부근, 근처"
+        },
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "离公司远吗？",
+          pinyin: "Lí gōngsī yuǎn ma?",
+          kr: "회사에서 멀어?",
+          note: "离(lí): ~로부터(거리 격조사) / 远(yuǎn): 멀다"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "不太远，坐公交十分钟。",
+          pinyin: "Bú tài yuǎn, zuò gōngjiāo shí fēnzhōng.",
+          kr: "별로 안 멀어, 버스 타고 10분 걸려.",
+          note: "坐公交: 버스를 타다 / 分钟(fēnzhōng): 분"
+        }
+      ]
+    },
+    {
+      day: 24,
+      title: "洗手间在哪儿？ (화장실이 어디예요?)",
+      youtubeTime: "18:45",
+      seconds: 1125,
+      dialogues: [
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "请问，洗手间在哪儿？",
+          pinyin: "Qǐngwèn, xǐshǒujiān zài nǎr?",
+          kr: "말씀 좀 여쭙겠습니다, 화장실이 어디인가요?",
+          note: "请问(qǐngwèn): 말씀 좀 묻겠습니다 / 洗手间: 화장실"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "在前边，往右拐。",
+          pinyin: "Zài qiánbian, wǎng yòu guǎi.",
+          kr: "앞쪽에 있어요, 우회전하세요.",
+          note: "前边(qiánbian): 앞쪽 / 往(wǎng): ~쪽으로 / 拐(guǎi): 돌다, 꺾다"
+        },
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "是在电梯旁边吗？",
+          pinyin: "Shì zài diàntī pángbiān ma?",
+          kr: "엘리베이터 옆에 있나요?",
+          note: "电梯(diàntī): 엘리베이터 / 旁边(pángbiān): 옆"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "对，就在电梯旁边。",
+          pinyin: "Duì, jiù zài diàntī pángbiān.",
+          kr: "네, 바로 엘리베이터 옆에 있습니다.",
+          note: "就(jiù): 바로"
+        }
+      ]
+    },
+    {
+      day: 25,
+      title: "你属什么？ (너 무슨 띠야?)",
+      youtubeTime: "25:00",
+      seconds: 1500,
+      dialogues: [
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "你是哪一年出生的？",
+          pinyin: "Nǐ shì nǎ yì nián chūshēng de?",
+          kr: "너 몇 년도에 태어났어?",
+          note: "出生(chūshēng): 태어나다"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "我是一九九六年出生的。",
+          pinyin: "Wǒ shì yī jiǔ jiǔ liù nián chūshēng de.",
+          kr: "나 1996년에 태어났어.",
+          note: "연도 읽기: 숫자를 한 자리씩 낱개로 발음"
+        },
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "那你属鼠吧？",
+          pinyin: "Nà nǐ shǔ shǔ ba?",
+          kr: "그럼 너 쥐띠겠네?",
+          note: "属(shǔ): ~띠에 속하다 / 鼠(shǔ): 쥐"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "没错，我属鼠。",
+          pinyin: "Méi cuò, wǒ shǔ shǔ.",
+          kr: "맞아, 나 쥐띠야.",
+          note: "没错(méi cuò): 틀림없다, 맞다"
+        }
+      ]
+    },
+    {
+      day: 26,
+      title: "请给我一杯热水 (따뜻한 물 한 잔만 주세요)",
+      youtubeTime: "31:15",
+      seconds: 1875,
+      dialogues: [
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "服务员，请给我一杯热水。",
+          pinyin: "Fúwùyuán, qǐng gěi wǒ yì bēi rèshuǐ.",
+          kr: "여기요, 따뜻한 물 한 잔만 주세요.",
+          note: "服务员(fúwùyuán): 종업원 / 热水(rèshuǐ): 온수, 따뜻한 물"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "好的，请稍等。",
+          pinyin: "Hǎode, qǐng shāo děng.",
+          kr: "네, 잠시만 기다려 주세요.",
+          note: "稍等(shāo děng): 잠시 기다리다"
+        },
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "顺便再拿几张纸巾吧。",
+          pinyin: "Shùnbiàn zài ná jǐ zhāng zhǐjīn ba.",
+          kr: "하는 김에 휴지 몇 장만 더 갖다주세요.",
+          note: "顺便(shùnbiàn): ~하는 김에 / 纸巾(zhǐjīn): 휴지, 냅킨"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "没问题，马上给您拿来。",
+          pinyin: "Méi wèntí, mǎshàng gěi nín nálái.",
+          kr: "문제없습니다, 바로 가져다 드릴게요.",
+          note: "马上(mǎshàng): 곧, 바로 / 拿来(nálái): 가져오다"
+        }
+      ]
+    },
+    {
+      day: 27,
+      title: "明天会下雨吗？ (내일 비가 올까?)",
+      youtubeTime: "37:30",
+      seconds: 2250,
+      dialogues: [
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "看天气预报了吗？明天会下雨吗？",
+          pinyin: "Kàn tiānqì yùbào le ma? Míngtiān huì xiàyǔ ma?",
+          kr: "일기예보 봤어? 내일 비 올까?",
+          note: "天气预报: 일기예보 / 下雨(xiàyǔ): 비가 내리다"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "听说下午会有大雨。",
+          pinyin: "Tīngshuō xiàwǔ huì yǒu dàyǔ.",
+          kr: "듣자 하니 오후에 큰비가 올 거래.",
+          note: "听说(tīngshuō): 듣자 하니 / 大雨(dàyǔ): 폭우, 큰비"
+        },
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "出门得带伞了。",
+          pinyin: "Chūmén děi dài sǎn le.",
+          kr: "나갈 때 우산 챙겨야겠네.",
+          note: "出门(chūmén): 외출하다 / 得(děi): ~해야 한다 / 伞(sǎn): 우산"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "是啊，别忘了带折叠伞。",
+          pinyin: "Shì a, bié wàng le dài zhédiésǎn.",
+          kr: "맞아, 접이식 우산 챙기는 거 잊지 마.",
+          note: "别(bié): ~하지 마라 / 忘(wàng): 잊다 / 折叠伞: 3단/접이식 우산"
+        }
+      ]
+    },
+    {
+      day: 28,
+      title: "你觉得怎么样？ (너는 어떻게 생각해?)",
+      youtubeTime: "43:45",
+      seconds: 2625,
+      dialogues: [
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "你觉得这个方案怎么样？",
+          pinyin: "Nǐ juéde zhèige fāng'àn zěnmeyàng?",
+          kr: "너 이 기획안(방안) 어떻게 생각해?",
+          note: "觉得(juéde): ~라고 생각하다, 느끼다 / 方案(fāng'àn): 방안"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "想法很好，但是有点儿难实现。",
+          pinyin: "Xiǎngfǎ hěn hǎo, dànshì yǒudiǎnr nán shíxiàn.",
+          kr: "아이디어는 좋은데, 실현하기가 조금 어렵네.",
+          note: "但是(dànshì): 그러나 / 实现(shíxiàn): 실현하다"
+        },
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "那我再修改一下。",
+          pinyin: "Nà wǒ zài xiūgǎi yíxià.",
+          kr: "그럼 내가 조금 더 수정해 볼게.",
+          note: "再(zài): 다시 / 修改(xiūgǎi): 수정하다"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "好的，有什么需要帮忙的随时找我。",
+          pinyin: "Hǎode, yǒu shénme xūyào bāngmáng de suíshí zhǎo wǒ.",
+          kr: "그래, 도움 필요한 거 있으면 언제든 나 찾아.",
+          note: "随时(suíshí): 언제든지 / 找(zhǎo): 찾다"
+        }
+      ]
+    },
+    {
+      day: 29,
+      title: "可以便宜一点儿吗？ (좀 더 깎아주실 수 있나요?)",
+      youtubeTime: "50:00",
+      seconds: 3000,
+      dialogues: [
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "老板，这个能不能便宜一点儿？",
+          pinyin: "Lǎobǎn, zhèige néng bu néng piányi yìdiǎnr?",
+          kr: "사장님, 이거 좀 더 싸게 해주실 수 있나요?",
+          note: "能不能: ~할 수 있냐 없냐 / 便宜(piányi): 싸다"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "这已经是最低价了，不赚钱的。",
+          pinyin: "Zhè yǐjīng shì zuì dī jià le, bù zhuànqián de.",
+          kr: "이거 이미 최저가예요, 남는 것도 없어요.",
+          note: "最低价(zuì dī jià): 최저가 / 赚钱(zhuànqián): 돈을 벌다"
+        },
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "买两个的话，给打个折吧。",
+          pinyin: "Mǎi liǎng gè dehuà, gěi dǎ gè zhé ba.",
+          kr: "두 개 사면 할인 좀 해주세요.",
+          note: "打折(dǎzhé): 할인하다"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "行吧，给你打九折。",
+          pinyin: "Xíng ba, gěi nǐ dǎ jiǔ zhé.",
+          kr: "좋아요, 10% 깎아(90% 가격으로) 드릴게요.",
+          note: "九折(jiǔ zhé): 10% 할인 (정가의 90% 판매)"
+        }
+      ]
+    },
+    {
+      day: 30,
+      title: "你打算怎么过生日？ (생일 어떻게 보낼 계획이야?)",
+      youtubeTime: "56:15",
+      seconds: 3375,
+      dialogues: [
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "下周是你生日吧？打算怎么过？",
+          pinyin: "Xià zhōu shì nǐ shēngrì ba? Dǎsuàn zěnme guò?",
+          kr: "다음 주가 네 생일이지? 어떻게 보낼 계획이야?",
+          note: "过生日(guò shēngrì): 생일을 보내다 / 打算(dǎsuàn): 계획하다"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "想和几个好朋友一起吃顿饭。",
+          pinyin: "Xiǎng hé jǐ gè hǎo péngyou yìqǐ chī dùn fàn.",
+          kr: "친한 친구 몇 명이랑 같이 밥 한 끼 먹으려고.",
+          note: "顿(dùn): 끼니를 세는 양사"
+        },
+        {
+          role: "A",
+          roleLabel: "A (여성)",
+          cn: "餐厅订好了吗？",
+          pinyin: "Cāntīng dìng hǎo le ma?",
+          kr: "식당은 예약해 뒀어?",
+          note: "订(dìng): 예약하다 / 订好: 예약 완료하다"
+        },
+        {
+          role: "B",
+          roleLabel: "B (남성)",
+          cn: "订了一家很有名的火锅店。",
+          pinyin: "Dìng le yì jiā hěn yǒumíng de huǒguōdiàn.",
+          kr: "아주 유명한 훠궈 집으로 하나 예약했어.",
+          note: "有名(yǒumíng): 유명하다 / 火锅店: 훠궈 전문점"
+        }
+      ]
+    },
+    {
       day: 31,
       title: "你喜欢什么运动？ (어떤 운동 좋아해?)",
       youtubeTime: "00:00",
