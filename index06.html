@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>중국어회화 100일의 기적 - AI 롤플레이 & 말하기 스튜디오</title>
+
+  <!-- PWA 매니페스트 및 모바일 테마 설정 -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#dc2626">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <!-- 서비스 워커 등록 -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('중국어 SW 등록 성공:', reg.scope))
+          .catch(err => console.log('중국어 SW 등록 실패:', err));
+      });
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --primary: #f87171;
+      --primary-hover: #dc2626;
+      --accent-gold: #fbbf24;
+      --accent-green: #10b981;
+      --role-a: #ec4899;
+      --role-b: #3b82f6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      padding: 16px;
+      line-height: 1.6;
+    }
+
+    .container { max-width: 820px; margin: 0 auto; }
+
+    header {
+      position: relative;
+      text-align: center;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    header h1 {
+      font-size: 1.45rem;
+      color: var(--primary);
+      margin-bottom: 6px;
+      font-weight: 800;
+    }
+
+    /* 우측 상단 출처 배지 */
+    .source-badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--card-border);
+      padding: 4px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .source-badge:hover {
+      color: #ffffff;
+      border-color: var(--primary);
+      background: #1e293b;
+    }
+
+    @media (max-width: 600px) {
+      .source-badge {
+        position: static;
+        margin-bottom: 10px;
+        display: inline-flex;
+      }
+    }
+
+    .badge-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: 0.78rem;
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      padding: 3px 12px;
+      border-radius: 12px;
+      color: var(--text-sub);
+    }
+    .badge.active { color: var(--accent-gold); border-color: var(--accent-gold); }
+
+    /* 네비게이션 바 */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+    }
+    .nav-btn {
+      background: #334155;
+      color: var(--text-main);
+      border: 1px solid #475569;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .nav-btn:hover:not(:disabled) { background: #475569; }
+    .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .day-select {
+      flex: 1;
+      background: #0f172a;
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+    .day-select option { background: #0f172a; color: #fff; }
+
+    /* 컨트롤 바 */
+    .control-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .ctrl-btn {
+      background: #334155;
+      color: #cbd5e1;
+      border: 1px solid #475569;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .ctrl-btn:hover { background: #475569; color: #fff; }
+    .play-btn {
+      background: var(--accent-green);
+      color: #0f172a;
+      font-weight: 700;
+      border: none;
+    }
+    .play-btn:hover { background: #059669; color: #fff; }
+    .play-btn.playing { background: #dc2626; color: #fff; }
+
+    /* 다이얼로그 카드 */
+    .dialogue-list { display: flex; flex-direction: column; gap: 12px; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      transition: all 0.25s ease;
+    }
+    .card.active-playing {
+      border-color: var(--primary);
+      background-color: #3b1820;
+    }
+
+    .card-main-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .kr-container { display: flex; align-items: flex-start; gap: 10px; flex: 1; }
+    .toggle-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background-color: #334155;
+      color: var(--primary);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: bold;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      cursor: pointer;
+      margin-top: 2px;
+    }
+    .card.open .toggle-btn {
+      transform: rotate(90deg);
+      background-color: var(--primary);
+      color: #0f172a;
+    }
+    .speaker-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: white;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+    .speaker-A { background-color: var(--role-a); }
+    .speaker-B { background-color: var(--role-b); }
+
+    .kr-text-wrap { flex: 1; }
+    .kr-text { font-size: 1.05rem; font-weight: 700; color: #f8fafc; line-height: 1.45; }
+
+    .actions-wrap { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .btn-record {
+      background-color: #451a24;
+      color: #fda4af;
+      border: 1px solid #881337;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-record:hover { background-color: #701a30; }
+    .btn-record.recording {
+      background-color: #dc2626;
+      color: white;
+      animation: pulse 1.2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* 발화 분석 결과 패널 */
+    .analysis-panel {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+    }
+    .analysis-panel.show { display: block; }
+    .panel-header {
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .score-badge { padding: 2px 8px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; }
+    .score-high { background: #14532d; color: #86efac; }
+    .score-mid { background: #713f12; color: #fde047; }
+    .score-low { background: #7f1d1d; color: #fca5a5; }
+    .speech-transcript { font-size: 0.92rem; margin-bottom: 6px; color: #cbd5e1; }
+    .diff-box {
+      font-size: 0.9rem;
+      padding: 8px 10px;
+      background: #1e293b;
+      border-radius: 6px;
+      border: 1px solid #334155;
+    }
+    .match-char { color: #4ade80; font-weight: 700; }
+    .miss-char { color: #f87171; text-decoration: line-through; }
+
+    /* 중국어 정답 패널 */
+    .cn-panel {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--card-border);
+    }
+    .card.open .cn-panel { display: block; }
+    .cn-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .cn-text { font-size: 1.25rem; font-weight: 700; color: #ffffff; letter-spacing: 1px; }
+    .pinyin-text { font-size: 0.9rem; color: var(--accent-gold); margin-bottom: 8px; font-family: monospace; }
+    .btn-tts {
+      background-color: #334155;
+      color: #38bdf8;
+      border: 1px solid #475569;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .btn-tts:hover { background-color: #475569; color: #fff; }
+    .note-box {
+      background-color: #1e1b4b;
+      border: 1px solid #3730a3;
+      color: #c7d2fe;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <!-- 우측 상단 출처 배지 -->
+    <a href="https://www.nexusbook.com" target="_blank" rel="noopener noreferrer" class="source-badge">
+      📚 출처: 넥서스 중국어 100일 ↗
+    </a>
+
+    <h1 id="dayTitle">🇨🇳 중국어회화 100일의 기적</h1>
+    <div class="badge-bar">
+      <span class="badge active" id="badgeTopic">DAY 로딩 중...</span>
+      <span class="badge" id="badgeVoice">🎙️ 중국어 음성 엔진 준비 중</span>
+    </div>
+  </header>
+
+  <!-- 네비게이션 드롭다운 -->
+  <div class="nav-bar">
+    <button id="prevBtn" class="nav-btn" onclick="navDay(-1)">◀ 이전</button>
+    <select id="daySelect" class="day-select" onchange="changeDay(this.value)"></select>
+    <button id="nextBtn" class="nav-btn" onclick="navDay(1)">다음 ▶</button>
+  </div>
+
+  <!-- 컨트롤 패널 -->
+  <div class="control-panel">
+    <div class="btn-group">
+      <button id="playAllBtn" class="ctrl-btn play-btn" onclick="togglePlayAll()">
+        ▶ 대화 연속 롤플레이
+      </button>
+    </div>
+    <div class="btn-group">
+      <button class="ctrl-btn" onclick="toggleAllCards(true)">전체 정답 열기</button>
+      <button class="ctrl-btn" onclick="toggleAllCards(false)">전체 접기</button>
+    </div>
+  </div>
+
+  <!-- 대화문 리스트 -->
+  <div id="dialogueList" class="dialogue-list"></div>
+</div>
+
+<script src="data.js"></script>
+
+<script>
+  let days = (typeof chineseData !== "undefined") ? chineseData : [];
+  let currentDayIdx = 0;
+  let isPlayingAll = false;
+  let currentPlayIdx = 0;
+  let femaleVoice = null;
+  let maleVoice = null;
+  let recognition = null;
+  let activeRecordingId = null;
+  let speechSilenceTimer = null;
+  let accumulatedTranscript = "";
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.lang = 'zh-CN';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+  }
+
+  function loadVoices() {
+    const voices = window.speechSynthesis.getVoices();
+    const zhVoices = voices.filter(v => v.lang.startsWith("zh"));
+    femaleVoice = zhVoices.find(v => /Ting-Ting|Xiaoxiao|Yaoyao|Huihui/i.test(v.name)) || zhVoices[0] || null;
+    maleVoice = zhVoices.find(v => /Kangkang|Yunxi|Yunyang/i.test(v.name)) || zhVoices[1] || zhVoices[0] || null;
+
+    const vBadge = document.getElementById("badgeVoice");
+    if (vBadge) {
+      vBadge.textContent = zhVoices.length > 0 ? "🎙️ 중국어 음성 엔진 준비 완료" : "🎙️ 기본 음성 엔진 사용";
+    }
+  }
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+  setTimeout(loadVoices, 300);
+
+  function initSelect() {
+    const sel = document.getElementById("daySelect");
+    if (!sel || days.length === 0) return;
+    sel.innerHTML = days.map((d, i) => `
+      <option value="${i}">DAY ${String(d.day || i+1).padStart(3, '0')}: ${d.title || ''}</option>
+    `).join("");
+    updateNavButtons();
+  }
+
+  function updateNavButtons() {
+    document.getElementById("prevBtn").disabled = (currentDayIdx <= 0);
+    document.getElementById("nextBtn").disabled = (currentDayIdx >= days.length - 1);
+  }
+
+  function navDay(delta) {
+    const target = currentDayIdx + delta;
+    if (target >= 0 && target < days.length) {
+      document.getElementById("daySelect").value = target;
+      changeDay(target);
+    }
+  }
+
+  function changeDay(idx) {
+    if (isPlayingAll) stopPlayAll();
+    currentDayIdx = parseInt(idx);
+    updateNavButtons();
+    renderDay();
+  }
+
+  function renderDay() {
+    const cur = days[currentDayIdx];
+    if (!cur) return;
+
+    document.getElementById("dayTitle").textContent = `🇨🇳 DAY ${String(cur.day || currentDayIdx+1).padStart(3, '0')} : ${cur.title || ''}`;
+    document.getElementById("badgeTopic").textContent = `🎯 ${cur.topic || cur.title || ''}`;
+
+    const diagListEl = document.getElementById("dialogueList");
+    diagListEl.innerHTML = (cur.dialogues || []).map((item, idx) => `
+      <div class="card" id="card-diag-${idx}">
+        <div class="card-main-row">
+          <div class="kr-container">
+            <button class="toggle-btn" onclick="toggleCard('diag-${idx}')" title="정답 토글">▶</button>
+            <span class="speaker-badge speaker-${item.role}">${item.roleLabel || item.role}</span>
+            <div class="kr-text-wrap">
+              <div class="kr-text">${item.kr}</div>
+            </div>
+          </div>
+          <div class="actions-wrap">
+            <button class="btn-record" id="rec-btn-diag-${idx}" onclick="startSpeaking('diag-${idx}', '${item.cn.replace(/'/g, "\'")}')">
+              🎙️ 말하기
+            </button>
+          </div>
+        </div>
+
+        <div class="analysis-panel" id="analysis-diag-${idx}">
+          <div class="panel-header">
+            <span>🗣️ 내 발화 분석 결과</span>
+            <span class="score-badge" id="score-diag-${idx}">일치도: -%</span>
+          </div>
+          <div class="speech-transcript" id="transcript-diag-${idx}">인식 중...</div>
+          <div class="diff-box" id="diff-diag-${idx}"></div>
+        </div>
+
+        <div class="cn-panel">
+          <div class="cn-row">
+            <span class="cn-text">${item.cn}</span>
+            <button class="btn-tts" onclick="speakSingle(${idx})">🔊 원문 듣기</button>
+          </div>
+          <div class="pinyin-text">${item.pinyin || ''}</div>
+          ${item.note ? `<div class="note-box">💡 팁: ${item.note}</div>` : ''}
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function toggleCard(id) {
+    document.getElementById(`card-${id}`).classList.toggle("open");
+  }
+
+  function toggleAllCards(open) {
+    document.querySelectorAll(".card").forEach(c => {
+      if (open) c.classList.add("open");
+      else c.classList.remove("open");
+    });
+  }
+
+  function speakText(text, role, onEnd) {
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "zh-CN";
+    utter.rate = 0.95;
+    if (role === "B" || String(role).toUpperCase().includes("B")) {
+      if (maleVoice) utter.voice = maleVoice;
+      utter.pitch = 0.88;
+    } else {
+      if (femaleVoice) utter.voice = femaleVoice;
+      utter.pitch = 1.05;
+    }
+    if (onEnd) {
+      utter.onend = onEnd;
+      utter.onerror = onEnd;
+    }
+    window.speechSynthesis.speak(utter);
+  }
+
+  function speakSingle(idx) {
+    if (isPlayingAll) stopPlayAll();
+    const cur = days[currentDayIdx];
+    const item = cur.dialogues[idx];
+    const card = document.getElementById(`card-diag-${idx}`);
+    
+    document.querySelectorAll(".card").forEach(c => c.classList.remove("active-playing"));
+    card.classList.add("active-playing");
+    speakText(item.cn, item.role, () => {
+      card.classList.remove("active-playing");
+    });
+  }
+
+  function togglePlayAll() {
+    if (isPlayingAll) stopPlayAll();
+    else startPlayAll();
+  }
+
+  function startPlayAll() {
+    isPlayingAll = true;
+    currentPlayIdx = 0;
+    const btn = document.getElementById("playAllBtn");
+    btn.innerHTML = "⏹ 연속 듣기 정지";
+    btn.classList.add("playing");
+    toggleAllCards(true);
+    playNextSequence();
+  }
+
+  function stopPlayAll() {
+    isPlayingAll = false;
+    window.speechSynthesis.cancel();
+    document.querySelectorAll(".card").forEach(c => c.classList.remove("active-playing"));
+    const btn = document.getElementById("playAllBtn");
+    if (btn) {
+      btn.innerHTML = "▶ 대화 연속 롤플레이";
+      btn.classList.remove("playing");
+    }
+  }
+
+  function playNextSequence() {
+    const cur = days[currentDayIdx];
+    if (!isPlayingAll || currentPlayIdx >= cur.dialogues.length) {
+      stopPlayAll();
+      return;
+    }
+    document.querySelectorAll(".card").forEach(c => c.classList.remove("active-playing"));
+    const card = document.getElementById(`card-diag-${currentPlayIdx}`);
+    if (card) {
+      card.classList.add("active-playing");
+      card.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    const item = cur.dialogues[currentPlayIdx];
+    speakText(item.cn, item.role, () => {
+      if (!isPlayingAll) return;
+      currentPlayIdx++;
+      setTimeout(playNextSequence, 550);
+    });
+  }
+
+  function startSpeaking(uniqueId, targetCn) {
+    if (!recognition) {
+      alert("현재 브라우저에서는 음성 인식을 지원하지 않습니다. Chrome 또는 Edge 브라우저를 이용해 주세요.");
+      return;
+    }
+
+    if (activeRecordingId !== null) {
+      if (activeRecordingId === uniqueId) {
+        finishSpeaking(uniqueId, targetCn);
+      } else {
+        recognition.stop();
+      }
+      return;
+    }
+
+    activeRecordingId = uniqueId;
+    accumulatedTranscript = "";
+    if (speechSilenceTimer) clearTimeout(speechSilenceTimer);
+
+    const btn = document.getElementById(`rec-btn-${uniqueId}`);
+    btn.classList.add("recording");
+    btn.innerHTML = "⏹️ 완료";
+
+    const panel = document.getElementById(`analysis-${uniqueId}`);
+    panel.classList.add("show");
+    document.getElementById(`transcript-${uniqueId}`).innerHTML = `<strong>인식 중...</strong> <span style="color:#f87171;">중국어로 말씀해 보세요.</span>`;
+
+    recognition.onresult = (event) => {
+      let interim = "";
+      let final = "";
+      for (let i = 0; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) final += event.results[i][0].transcript + " ";
+        else interim += event.results[i][0].transcript;
+      }
+      accumulatedTranscript = (final + interim).trim();
+      document.getElementById(`transcript-${uniqueId}`).innerHTML = `<strong>인식된 문장:</strong> "${accumulatedTranscript}"`;
+
+      if (speechSilenceTimer) clearTimeout(speechSilenceTimer);
+      speechSilenceTimer = setTimeout(() => {
+        finishSpeaking(uniqueId, targetCn);
+      }, 3000);
+    };
+
+    recognition.onerror = (event) => {
+      if (event.error !== "no-speech") console.error("STT 에러:", event.error);
+      resetRecButton(uniqueId);
+      activeRecordingId = null;
+    };
+
+    recognition.onend = () => {
+      if (activeRecordingId !== null && accumulatedTranscript) {
+        analyzeSpeech(uniqueId, targetCn, accumulatedTranscript);
+      }
+      resetRecButton(uniqueId);
+      activeRecordingId = null;
+    };
+
+    recognition.start();
+  }
+
+  function finishSpeaking(uniqueId, targetCn) {
+    if (speechSilenceTimer) clearTimeout(speechSilenceTimer);
+    recognition.stop();
+    resetRecButton(uniqueId);
+    if (accumulatedTranscript) {
+      analyzeSpeech(uniqueId, targetCn, accumulatedTranscript);
+    }
+    activeRecordingId = null;
+  }
+
+  function resetRecButton(uniqueId) {
+    const btn = document.getElementById(`rec-btn-${uniqueId}`);
+    if (btn) {
+      btn.classList.remove("recording");
+      btn.innerHTML = "🎙️ 말하기";
+    }
+  }
+
+  function cleanChinese(str) {
+    return str.replace(/[\s\p{P}\p{S}]/gu, '');
+  }
+
+  function levenshtein(a, b) {
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        if (b.charAt(i - 1) === a.charAt(j - 1)) {
+          matrix[i][j] = matrix[i - 1][j - 1];
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1,
+            matrix[i][j - 1] + 1,
+            matrix[i - 1][j] + 1
+          );
+        }
+      }
+    }
+    return matrix[b.length][a.length];
+  }
+
+  function analyzeSpeech(uniqueId, targetCn, userSpoken) {
+    const cleanTarget = cleanChinese(targetCn);
+    const cleanUser = cleanChinese(userSpoken);
+
+    const dist = levenshtein(cleanTarget, cleanUser);
+    const maxLen = Math.max(cleanTarget.length, cleanUser.length);
+    const score = maxLen === 0 ? 100 : Math.max(0, Math.round(((maxLen - dist) / maxLen) * 100));
+
+    const panel = document.getElementById(`analysis-${uniqueId}`);
+    panel.classList.add("show");
+
+    const scoreEl = document.getElementById(`score-${uniqueId}`);
+    scoreEl.textContent = `일치도: ${score}%`;
+    scoreEl.className = "score-badge " + (score >= 80 ? "score-high" : score >= 50 ? "score-mid" : "score-low");
+
+    document.getElementById(`transcript-${uniqueId}`).innerHTML = `<strong>인식된 문장:</strong> "${userSpoken}"`;
+
+    const diffHtml = cleanTarget.split('').map(c => {
+      return cleanUser.includes(c) ? `<span class="match-char">${c}</span>` : `<span class="miss-char">${c}</span>`;
+    }).join('');
+
+    document.getElementById(`diff-${uniqueId}`).innerHTML = `
+      <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:4px;">목표 문장 글자 대조 (<span style="color:#4ade80">초록: 일치</span>, <span style="color:#f87171; text-decoration:line-through">빨강: 미흡</span>):</div>
+      ${diffHtml}
+    `;
+
+    const card = document.getElementById(`card-${uniqueId}`);
+    if (card) card.classList.add("open");
+  }
+
+  // 앱 시작
+  if (days.length > 0) {
+    initSelect();
+    changeDay(0);
+  } else {
+    document.getElementById("dialogueList").innerHTML = `<div style="padding:20px; text-align:center; color:#f87171;">⚠️ data.js 파일을 불러오지 못했습니다. 동일 폴더에 data.js가 있는지 확인해 주세요.</div>`;
+  }
+</script>
+
+</body>
+</html>
