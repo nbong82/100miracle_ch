@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>중국어회화 100일의 기적 - 롤플레잉 & 발음 평가 스튜디오</title>
+
+  <!-- PWA 설정 (매니페스트 및 테마 색상) -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <!-- PWA 서비스 워커(sw.js) 등록 스크립트 -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker 등록 성공:', reg.scope))
+          .catch(err => console.log('Service Worker 등록 실패:', err));
+      });
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --primary: #38bdf8;
+      --primary-hover: #0284c7;
+      --accent-red: #ef4444;
+      --accent-green: #10b981;
+      --accent-yellow: #f59e0b;
+      --role-a: #ec4899;
+      --role-b: #3b82f6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      padding: 16px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    header {
+      position: relative;
+      text-align: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    header h1 {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    /* 우측 상단 출처 배지 스타일 */
+    .source-badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--card-border);
+      padding: 4px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .source-badge:hover {
+      color: #ffffff;
+      border-color: var(--primary);
+      background: #1e293b;
+    }
+
+    @media (max-width: 600px) {
+      .source-badge {
+        position: static;
+        margin-bottom: 10px;
+        display: inline-flex;
+      }
+    }
+
+    .badge-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: 0.78rem;
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      padding: 3px 12px;
+      border-radius: 12px;
+      color: var(--text-sub);
+    }
+    .badge.active { color: var(--accent-green); border-color: var(--accent-green); }
+
+    /* 상단 네비게이션 */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 14px;
+    }
+    .nav-btn {
+      background: #334155;
+      color: var(--text-main);
+      border: 1px solid #475569;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .nav-btn:hover:not(:disabled) { background: #475569; }
+    .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .lesson-select {
+      flex: 1;
+      background: #0f172a;
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+    }
+    .lesson-select option { background: #0f172a; color: #fff; }
+
+    /* 컨트롤 바 */
+    .control-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
+    .ctrl-btn {
+      background: #334155;
+      color: #cbd5e1;
+      border: 1px solid #475569;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .ctrl-btn:hover { background: #475569; color: #fff; }
+    .play-btn {
+      background: var(--accent-green);
+      color: #0f172a;
+      font-weight: bold;
+      border: none;
+    }
+    .play-btn:hover { background: #059669; }
+
+    /* 강의 타이틀 */
+    .lesson-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+    .lesson-info h2 { font-size: 1.15rem; color: #fff; }
+    .yt-btn {
+      font-size: 0.8rem;
+      color: var(--accent-red);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* 대화문 리스트 */
+    .dialogue-list { display: flex; flex-direction: column; gap: 12px; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+    .card.speaking {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+    }
+    .card.recording-active {
+      border-color: var(--accent-red);
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
+    }
+
+    /* 한국어 라인 (카드 헤더) */
+    .card-header {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .card-header:hover { background: rgba(255, 255, 255, 0.05); }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+    .toggle-arrow {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      transition: transform 0.2s ease;
+      width: 14px;
+      text-align: center;
+    }
+    .card.open .toggle-arrow {
+      transform: rotate(90deg);
+      color: var(--primary);
+    }
+    .role-badge {
+      font-size: 0.72rem;
+      font-weight: bold;
+      padding: 2px 7px;
+      border-radius: 4px;
+      color: #fff;
+      white-space: nowrap;
+    }
+    .role-A { background: var(--role-a); }
+    .role-B { background: var(--role-b); }
+    
+    .kr-text {
+      font-size: 0.98rem;
+      font-weight: 500;
+      color: #e2e8f0;
+      flex: 1;
+    }
+
+    /* 한국어 라인 우측의 마이크 버튼 */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mic-btn-header {
+      background: #334155;
+      border: 1px solid #475569;
+      color: #f1f5f9;
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .mic-btn-header:hover { background: #475569; }
+    
+    /* 녹음 중 활성화 상태 (펄스 애니메이션) */
+    .mic-btn-header.recording {
+      background: var(--accent-red);
+      border-color: var(--accent-red);
+      color: #fff;
+      font-weight: bold;
+      animation: micPulse 1.2s infinite;
+    }
+    @keyframes micPulse {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
+    /* 펼침 내용 (중국어 본문 + 병음 + 발음 듣기 + 해설) */
+    .card-body {
+      display: none;
+      padding: 14px;
+      border-top: 1px solid var(--card-border);
+      background: rgba(15, 23, 42, 0.5);
+    }
+    .card.open .card-body { display: block; }
+
+    .cn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+      gap: 10px;
+    }
+    .cn-text {
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+    .listen-btn {
+      background: #334155;
+      border: 1px solid #475569;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .listen-btn:hover { background: #475569; }
+
+    .pinyin-text {
+      font-size: 0.92rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+      font-family: Arial, sans-serif;
+    }
+
+    .note-box {
+      background: rgba(51, 65, 85, 0.5);
+      border-left: 3px solid var(--primary);
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* 실시간 발음 평가 결과 창 */
+    .eval-box {
+      margin-top: 10px;
+      background: #0f172a;
+      border: 1px dashed var(--card-border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: none;
+    }
+    .eval-box.show { display: block; }
+    .eval-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .eval-title { font-size: 0.78rem; color: var(--text-sub); font-weight: 600; }
+    .eval-score {
+      font-size: 0.84rem;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .score-perfect { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+    .score-good { background: rgba(56, 189, 248, 0.2); color: var(--primary); border: 1px solid var(--primary); }
+    .score-retry { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+
+    .eval-text {
+      font-size: 0.95rem;
+      color: #f1f5f9;
+      margin-top: 4px;
+      word-break: break-all;
+    }
+    .eval-hint {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <!-- 우측 상단 출처 배지 -->
+    <a href="https://youtube.com/playlist?list=PLVP5Zbh1xZ2RfJUsPq0xIHOJwgNdGDvjk&si=yQAR2RNhsXQTAxKm" target="_blank" rel="noopener noreferrer" class="source-badge">
+      📚 출처: 유튜브 중국어 100일의 기적 ↗
+    </a>
+
+    <h1 id="appTitle">중국어회화 100일의 기적</h1>
+    <div class="badge-bar">
+      <span class="badge" id="voiceStatus">음성 엔진 로딩 중...</span>
+      <span class="badge" id="sttStatus">음성 인식 준비 완료</span>
+    </div>
+  </header>
+
+  <!-- 네비게이션: 이전 / 드롭다운 선택 / 다음 -->
+  <section class="nav-bar">
+    <button class="nav-btn" id="prevBtn" onclick="navigateDay(-1)">◀ 이전</button>
+    <select class="lesson-select" id="lessonDropdown" onchange="onSelectChange(this.value)"></select>
+    <button class="nav-btn" id="nextBtn" onclick="navigateDay(1)">다음 ▶</button>
+  </section>
+
+  <!-- 컨트롤 바: 전체 펼치기/접기 및 연속 듣기 -->
+  <section class="control-panel">
+    <div class="btn-group">
+      <button class="ctrl-btn" onclick="toggleAllCards(true)">전체 펼치기</button>
+      <button class="ctrl-btn" onclick="toggleAllCards(false)">전체 접기</button>
+    </div>
+    <div class="btn-group">
+      <button class="ctrl-btn play-btn" id="playBtn" onclick="startContinuousPlay()">▶ 대화 연속 듣기</button>
+      <button class="ctrl-btn" onclick="stopContinuousPlay()">■ 정지</button>
+    </div>
+  </section>
+
+  <!-- 현재 강의 정보 -->
+  <div class="lesson-info">
+    <h2 id="lessonTitle"></h2>
+    <a id="ytLink" class="yt-btn" href="#" target="_blank">⏱ 유튜브 강의 보기</a>
+  </div>
+
+  <!-- 대화문 목록 영역 -->
+  <main class="dialogue-list" id="dialogueContainer"></main>
+</div>
+
+<!-- 외부 학습 데이터 파일 -->
+<script src="data.js"></script>
+
+<script>
+  let currentLessonIndex = 0;
+  let isPlaying = false;
+  let zhVoice = null;
+
+  // 음성인식 상태 관리
+  let recognition = null;
+  let activeMicIndex = null;
+  let isManuallyStopped = false;
+
+  // 1. Web Speech Synthesis (중국어 음성 출력)
+  function initSpeechEngine() {
+    const voices = window.speechSynthesis.getVoices();
+    zhVoice = voices.find(v => v.lang.startsWith('zh') || v.lang.includes('cmn')) || null;
+    const badge = document.getElementById('voiceStatus');
+    if (zhVoice) {
+      badge.textContent = `중국어 엔진 탑재: ${zhVoice.name}`;
+      badge.classList.add('active');
+    } else {
+      badge.textContent = "기본 zh-CN 엔진 연동";
+    }
+  }
+
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = initSpeechEngine;
+  }
+
+  function speakSentence(text, role, onComplete) {
+    window.speechSynthesis.cancel();
+    if (!text) { if(onComplete) onComplete(); return; }
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'zh-CN';
+    if (zhVoice) utter.voice = zhVoice;
+
+    if (role === 'A') {
+      utter.pitch = 1.15;
+      utter.rate = 0.95;
+    } else {
+      utter.pitch = 0.85;
+      utter.rate = 0.92;
+    }
+
+    utter.onend = () => { if (onComplete) onComplete(); };
+    utter.onerror = () => { if (onComplete) onComplete(); };
+    window.speechSynthesis.speak(utter);
+  }
+
+  // 2. Web Speech Recognition (말하기 평가 엔진)
+  function initSpeechRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const sttBadge = document.getElementById('sttStatus');
+
+    if (!SpeechRecognition) {
+      sttBadge.textContent = "음성인식 미지원 브라우저 (Chrome 권장)";
+      sttBadge.style.color = "var(--accent-red)";
+      return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.lang = 'zh-CN'; // 중국어(간체) 인식
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      sttBadge.textContent = "🎤 음성 듣는 중... 말씀하세요!";
+      sttBadge.classList.add('active');
+      if (activeMicIndex !== null) {
+        const card = document.getElementById(`card-${activeMicIndex}`);
+        const micBtn = document.getElementById(`mic-btn-${activeMicIndex}`);
+        if (card) card.classList.add('recording-active');
+        if (micBtn) {
+          micBtn.classList.add('recording');
+          micBtn.innerHTML = '🛑 <span>듣는 중...</span>';
+        }
+      }
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      evaluateSpeech(activeMicIndex, transcript);
+    };
+
+    recognition.onerror = (event) => {
+      if (event.error !== 'no-speech' && event.error !== 'aborted') {
+        sttBadge.textContent = `인식 오류: ${event.error}`;
+      }
+      resetMicUI();
+    };
+
+    recognition.onend = () => {
+      sttBadge.textContent = "음성 인식 준비 완료";
+      sttBadge.classList.remove('active');
+      resetMicUI();
+    };
+  }
+
+  // 3. 발음 유사도 채점 (Levenshtein Distance)
+  function cleanChineseText(str) {
+    return str.replace(/[\s\p{P}\p{S}]/gu, '');
+  }
+
+  function calculateSimilarity(s1, s2) {
+    const str1 = cleanChineseText(s1);
+    const str2 = cleanChineseText(s2);
+    if (!str1 || !str2) return 0;
+    if (str1 === str2) return 100;
+
+    const track = Array(str2.length + 1).fill(null).map(() =>
+      Array(str1.length + 1).fill(null));
+    for (let i = 0; i <= str1.length; i += 1) track[0][i] = i;
+    for (let j = 0; j <= str2.length; j += 1) track[j][0] = j;
+
+    for (let j = 1; j <= str2.length; j += 1) {
+      for (let i = 1; i <= str1.length; i += 1) {
+        const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
+        track[j][i] = Math.min(
+          track[j][i - 1] + 1,
+          track[j - 1][i] + 1,
+          track[j - 1][i - 1] + indicator
+        );
+      }
+    }
+    const distance = track[str2.length][str1.length];
+    const maxLen = Math.max(str1.length, str2.length);
+    const score = Math.round(((maxLen - distance) / maxLen) * 100);
+    return Math.max(0, score);
+  }
+
+  function evaluateSpeech(index, recognizedText) {
+    if (index === null) return;
+    const lesson = courseData.lessons[currentLessonIndex];
+    const target = lesson.dialogues[index];
+    const score = calculateSimilarity(target.cn, recognizedText);
+
+    const card = document.getElementById(`card-${index}`);
+    if (card) card.classList.add('open');
+
+    const evalBox = document.getElementById(`eval-${index}`);
+    const evalScore = document.getElementById(`eval-score-${index}`);
+    const evalText = document.getElementById(`eval-text-${index}`);
+    const evalHint = document.getElementById(`eval-hint-${index}`);
+
+    evalBox.classList.add('show');
+    evalText.textContent = `내가 말한 문장: "${recognizedText}"`;
+
+    evalScore.className = 'eval-score';
+    if (score >= 85) {
+      evalScore.classList.add('score-perfect');
+      evalScore.textContent = `칭찬해요! ${score}점 (완벽)`;
+      evalHint.textContent = `정답 한자 "${target.cn}"와 완벽하게 일치합니다.`;
+    } else if (score >= 60) {
+      evalScore.classList.add('score-good');
+      evalScore.textContent = `좋아요! ${score}점 (통과)`;
+      evalHint.textContent = `성조와 발음에 조금만 더 신경 써 보세요. 정답: ${target.cn}`;
+    } else {
+      evalScore.classList.add('score-retry');
+      evalScore.textContent = `다시 도전! ${score}점`;
+      evalHint.textContent = `정답: "${target.cn}" (다시 마이크를 눌러 연습해 보세요)`;
+    }
+  }
+
+  function toggleSpeechRecognition(index, event) {
+    if (event) event.stopPropagation();
+    if (!recognition) {
+      alert("이 브라우저는 음성인식 기능을 지원하지 않습니다. Chrome 환경에서 열어주세요.");
+      return;
+    }
+
+    stopContinuousPlay();
+
+    if (activeMicIndex === index) {
+      isManuallyStopped = true;
+      recognition.stop();
+      resetMicUI();
+      return;
+    }
+
+    if (activeMicIndex !== null) {
+      recognition.stop();
+      resetMicUI();
+    }
+
+    activeMicIndex = index;
+    isManuallyStopped = false;
+
+    try {
+      recognition.start();
+    } catch (err) {
+      console.warn("Speech recognition error:", err);
+    }
+  }
+
+  function resetMicUI() {
+    if (activeMicIndex !== null) {
+      const prevBtn = document.getElementById(`mic-btn-${activeMicIndex}`);
+      const prevCard = document.getElementById(`card-${activeMicIndex}`);
+      if (prevBtn) {
+        prevBtn.classList.remove('recording');
+        prevBtn.innerHTML = '🎤 <span>말하기</span>';
+      }
+      if (prevCard) {
+        prevCard.classList.remove('recording-active');
+      }
+      activeMicIndex = null;
+    }
+  }
+
+  // 4. 네비게이션 및 Day 렌더링
+  function initDropdown() {
+    const dropdown = document.getElementById('lessonDropdown');
+    dropdown.innerHTML = '';
+    courseData.lessons.forEach((lesson, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = `Day ${String(lesson.day).padStart(2, '0')}. ${lesson.title}`;
+      dropdown.appendChild(opt);
+    });
+  }
+
+  function selectLesson(index) {
+    stopContinuousPlay();
+    if (recognition && activeMicIndex !== null) {
+      recognition.stop();
+      resetMicUI();
+    }
+
+    currentLessonIndex = index;
+    document.getElementById('lessonDropdown').value = index;
+    document.getElementById('prevBtn').disabled = (index === 0);
+    document.getElementById('nextBtn').disabled = (index === courseData.lessons.length - 1);
+
+    const lesson = courseData.lessons[index];
+    document.getElementById('lessonTitle').textContent = `Day ${lesson.day}. ${lesson.title}`;
+    
+    const yt = document.getElementById('ytLink');
+    yt.href = `https://youtu.be/${courseData.youtubeVideoId}?t=${lesson.seconds}`;
+    yt.textContent = `⏱ 유튜브 영상 (${lesson.youtubeTime})`;
+
+    const container = document.getElementById('dialogueContainer');
+    container.innerHTML = '';
+
+    lesson.dialogues.forEach((d, idx) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.id = `card-${idx}`;
+
+      card.innerHTML = `
+        <div class="card-header" onclick="toggleCard(${idx})">
+          <div class="header-left">
+            <span class="toggle-arrow">▶</span>
+            <span class="role-badge role-${d.role}">${d.roleLabel}</span>
+            <span class="kr-text">${d.kr}</span>
+          </div>
+          <div class="header-actions">
+            <button class="mic-btn-header" id="mic-btn-${idx}" onclick="toggleSpeechRecognition(${idx}, event)">
+              🎤 <span>말하기</span>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="cn-row">
+            <span class="cn-text">${d.cn}</span>
+            <button class="listen-btn" onclick="playSingle(${idx}, event)">🔊 발음 듣기</button>
+          </div>
+          <div class="pinyin-text">${d.pinyin}</div>
+          ${d.note ? `<div class="note-box">💡 ${d.note}</div>` : ''}
+
+          <div class="eval-box" id="eval-${idx}">
+            <div class="eval-header">
+              <span class="eval-title">내 발음 분석 결과</span>
+              <span class="eval-score" id="eval-score-${idx}"></span>
+            </div>
+            <div class="eval-text" id="eval-text-${idx}"></div>
+            <div class="eval-hint" id="eval-hint-${idx}"></div>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function onSelectChange(value) {
+    selectLesson(parseInt(value, 10));
+  }
+
+  function navigateDay(delta) {
+    const nextIdx = currentLessonIndex + delta;
+    if (nextIdx >= 0 && nextIdx < courseData.lessons.length) {
+      selectLesson(nextIdx);
+    }
+  }
+
+  function toggleCard(index) {
+    const card = document.getElementById(`card-${index}`);
+    if (card) card.classList.toggle('open');
+  }
+
+  function toggleAllCards(open) {
+    document.querySelectorAll('.card').forEach(c => c.classList.toggle('open', open));
+  }
+
+  function playSingle(index, event) {
+    if (event) event.stopPropagation();
+    stopContinuousPlay();
+    if (recognition && activeMicIndex !== null) {
+      recognition.stop();
+      resetMicUI();
+    }
+
+    const lesson = courseData.lessons[currentLessonIndex];
+    const d = lesson.dialogues[index];
+    const card = document.getElementById(`card-${index}`);
+    
+    if (card) {
+      card.classList.add('open');
+      card.classList.add('speaking');
+    }
+    speakSentence(d.cn, d.role, () => {
+      if (card) card.classList.remove('speaking');
+    });
+  }
+
+  function startContinuousPlay() {
+    stopContinuousPlay();
+    if (recognition && activeMicIndex !== null) {
+      recognition.stop();
+      resetMicUI();
+    }
+
+    isPlaying = true;
+    const lesson = courseData.lessons[currentLessonIndex];
+    let step = 0;
+
+    function next() {
+      if (!isPlaying || step >= lesson.dialogues.length) {
+        stopContinuousPlay();
+        return;
+      }
+
+      const d = lesson.dialogues[step];
+      const card = document.getElementById(`card-${step}`);
+      
+      if (card) {
+        card.classList.add('open');
+        card.classList.add('speaking');
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      speakSentence(d.cn, d.role, () => {
+        if (!isPlaying) return;
+        if (card) card.classList.remove('speaking');
+        step++;
+        setTimeout(next, 500);
+      });
+    }
+
+    next();
+  }
+
+  function stopContinuousPlay() {
+    isPlaying = false;
+    window.speechSynthesis.cancel();
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('speaking'));
+  }
+
+  window.onload = () => {
+    initSpeechEngine();
+    initSpeechRecognition();
+    initDropdown();
+    selectLesson(0);
+  };
+</script>
+</body>
+</html>
