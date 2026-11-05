@@ -2,7 +2,7 @@
  * 중국어회화 100일의 기적 학습 데이터베이스
  * 100강까지 확장 시 아래 lessons 배열에 Day 객체를 추가하기만 하면 됩니다.
  */
-const courseData = {
+const chineseData = {
   courseTitle: "중국어회화 100일의 기적",
   youtubeVideoId: "uHyupL7Tw0c", // 1강~10강 연속재생 기준
   lessons: [
